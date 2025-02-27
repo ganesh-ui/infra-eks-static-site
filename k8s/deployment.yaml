@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: static-site
+  labels:
+    app: static-site
+spec:
+  replicas: 2  # Number of website instances (pods)
+  selector:
+    matchLabels:
+      app: static-site
+  template:
+    metadata:
+      labels:
+        app: static-site
+    spec:
+      containers:
+      - name: nginx
+        image: 588738586526.dkr.ecr.us-east-1.amazonaws.com/static-site:latest  # Replace with your ECR image URL
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+      restartPolicy: Always
