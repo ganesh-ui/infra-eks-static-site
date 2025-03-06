@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Clone Infra Repo') {
             steps {
-                git 'https://github.com/ganesh-ui/infra-eks-static-site.git'
+                git branch: 'main', credentialsId: 'Git-cred', url: 'https://github.com/ganesh-ui/infra-eks-static-site.git'
             }
         }
 
@@ -36,7 +36,7 @@ pipeline {
         stage('Build & Push Docker Image') {
             steps {
                 sh '''
-                git clone https://github.com/ganesh-ui/GaneshGym.git website
+                git branch: 'main', credentialsId: 'Git-cred', url: 'https://github.com/ganesh-ui/GaneshGym.git' website
                 docker build -t $ECR_REPO:$IMAGE_TAG ./website
                 aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
                 docker tag $ECR_REPO:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG
